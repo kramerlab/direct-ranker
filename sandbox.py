@@ -21,19 +21,6 @@ x_test, y_test, q_test = readData(data_path="../data/MSLR-WEB10K/Fold1/test.txt"
 # x_test, y_test, q_test = readData(debug_data=True, binary=True, at=10, number_features=136, bin_cutoff=1.5,
 #                                   cut_zeros=True)
 
-x = np.load("../data/MSLR-WEB10K/x_total.npy")
-x = QuantileTransformer(output_distribution="normal").fit_transform(x) / 3
-#x = StandardScaler().fit_transform(x)
-# y = np.array([np.load("../data/MSLR-WEB10K/y_total.npy")]).transpose()
-
-y = np.load("../data/MSLR-WEB10K/y_total.npy")
-for idx, v in enumerate(y):
-    if v > 1.5:
-        y[idx] = 1
-    else:
-        y[idx] = 0
-y = np.array([y]).transpose()
-
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=42)
 
 def lambda_cost(nn, y0):
