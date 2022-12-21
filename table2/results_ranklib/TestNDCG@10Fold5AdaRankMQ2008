@@ -1,0 +1,18 @@
+
+Discard orig. features
+Training data:	/home/makoeppe/MQ2008/Fold5/train.txt
+Test data:	/home/makoeppe/MQ2008/Fold5/test.txt
+Feature vector representation: Dense.
+Ranking method:	AdaRank
+Feature description file:	Unspecified. All features will be used.
+Train metric:	NDCG@10
+Test metric:	NDCG@10
+Feature normalization: No
+
+[+] AdaRank's Parameters:
+
+Reading feature file [/home/makoeppe/MQ2008/Fold5/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2008/Fold5/train.txt]... [Done.]            
+(470 ranked lists, 9442 entries read)
+Reading feature file [/home/makoeppe/MQ2008/Fold5/test.txt]: 0... Reading feature file [/home/makoeppe/MQ2008/Fold5/test.txt]... [Done.]            
+(157 ranked lists, 2707 entries read)
+NDCG@10 on test data: 0.5534

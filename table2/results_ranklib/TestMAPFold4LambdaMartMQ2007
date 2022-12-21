@@ -1,0 +1,18 @@
+
+Discard orig. features
+Training data:	/home/makoeppe/MQ2007/Fold4/train.txt
+Test data:	/home/makoeppe/MQ2007/Fold4/test.txt
+Feature vector representation: Dense.
+Ranking method:	LambdaMART
+Feature description file:	Unspecified. All features will be used.
+Train metric:	MAP
+Test metric:	MAP
+Feature normalization: No
+
+[+] LambdaMART's Parameters:
+
+Reading feature file [/home/makoeppe/MQ2007/Fold4/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold4/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold4/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold4/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold4/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold4/train.txt]... [Done.]            
+(1014 ranked lists, 41478 entries read)
+Reading feature file [/home/makoeppe/MQ2007/Fold4/test.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold4/test.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold4/test.txt]... [Done.]            
+(339 ranked lists, 13855 entries read)
+MAP on test data: 0.4397
