@@ -70,6 +70,7 @@ sleep 1
 cd table2
 ln -s ../Rankers .
 rm -r run_scripts
+mkdir results_ranklib
 python create_runscripts.py --data ../data/MSLR-TEST --jarpath .. --resultsdir results_ranklib --datalabel MQ2007 --test 1
 python create_runscripts.py --data ../data/MSLR-TEST --jarpath .. --resultsdir results_ranklib --datalabel MQ2008 --test 1
 python create_runscripts.py --data ../data/MSLR-TEST --jarpath .. --resultsdir results_ranklib --datalabel MSLR-WEB10K --test 1

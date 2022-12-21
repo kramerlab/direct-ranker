@@ -66,6 +66,7 @@ For generating table 2 one should run the following scripts in the folder `table
 
 1. Running the ranklib models
 ```bash
+mkdir results_ranklib
 python create_runscripts.py --data ../data/MQ2007 --jarpath .. --resultsdir results_ranklib --datalabel MQ2007 # create run scripts for ranklib and MQ2007
 python create_runscripts.py --data ../data/MQ2008 --jarpath .. --resultsdir results_ranklib --datalabel MQ2008 # create run scripts for ranklib and MQ2008
 python create_runscripts.py --data ../data/MSLR-WEB10K --jarpath .. --resultsdir results_ranklib --datalabel MSLR-WEB10K # create run scripts for ranklib and MSLR-WEB10K
