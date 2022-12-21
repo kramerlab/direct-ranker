@@ -12,7 +12,7 @@ For MQ2007/8 we remove all the zeros in the queries with the script `delete_zero
 pip install virtualenv
 virtualenv DirectRanker
 source DirectRanker/bin/activate
-pip install -r /path/to/requirements.txt
+pip install -r requirements.txt
 ```
 
 # Test the code

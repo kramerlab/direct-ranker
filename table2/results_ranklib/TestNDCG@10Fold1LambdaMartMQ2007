@@ -1,18 +1,0 @@
-
-Discard orig. features
-Training data:	/home/makoeppe/MQ2007/Fold1/train.txt
-Test data:	/home/makoeppe/MQ2007/Fold1/test.txt
-Feature vector representation: Dense.
-Ranking method:	LambdaMART
-Feature description file:	Unspecified. All features will be used.
-Train metric:	NDCG@10
-Test metric:	NDCG@10
-Feature normalization: No
-
-[+] LambdaMART's Parameters:
-
-Reading feature file [/home/makoeppe/MQ2007/Fold1/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold1/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold1/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold1/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold1/train.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold1/train.txt]... [Done.]            
-(1017 ranked lists, 42158 entries read)
-Reading feature file [/home/makoeppe/MQ2007/Fold1/test.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold1/test.txt]: 0... Reading feature file [/home/makoeppe/MQ2007/Fold1/test.txt]... [Done.]            
-(336 ranked lists, 13652 entries read)
-NDCG@10 on test data: 0.471
