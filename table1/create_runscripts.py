@@ -34,7 +34,11 @@ parameter_listnet = {
     "-lr" : [0.0001, "0.00001"]
 }
 
-dics = [parameter_lambda, parameter_adarank, parameter_ranknet, parameter_listnet]
+dics = {"lambda": parameter_lambda,
+        "adarank": parameter_adarank,
+        "ranknet": parameter_ranknet,
+        "listnet": parameter_listnet
+}
 
 parameter_adarank_test = {
     "Name" : "AdaRank",
@@ -60,7 +64,11 @@ parameter_listnet_test = {
     "-epoch" : [1],
 }
 
-dics_test = [parameter_lambda_test, parameter_adarank_test, parameter_ranknet_test, parameter_listnet_test]
+dics_test = {"lambda": parameter_lambda_test,
+            "adarank": parameter_adarank_test,
+            "ranknet": parameter_ranknet_test,
+            "listnet": parameter_listnet_test
+}
 
 sbatch_pre = """#!/bin/bash
 #SBATCH --ntasks 4
@@ -80,6 +88,8 @@ def options():
     parser = optparse.OptionParser()
     parser.add_option("-d", "--data", dest="data_dir",
       help="where to find the data DIRECTORY")
+    parser.add_option("-m", "--model", dest="model_names",
+      help="Model names (lambda, ranknet, adarank, listnet) in , sep")
     parser.add_option("-l", "--datalabel", dest="data_label",
       help="tag the experiments by label")
     parser.add_option("-j", "--jarpath", dest="jar_path",
@@ -90,20 +100,28 @@ def options():
       help="run on the cluster")
     parser.add_option("-t", "--test", dest="test",
       help="run in test mode")
+    parser.add_option("-b", "--ttest", dest="ttest",
+      help="run 15 fold test mode")
 
     (options, args) = parser.parse_args()
     return (options, args)
 
 
-def main(data_dir,data_label,jar_path,results_dir,cluster,test):
+def main(data_dir,data_label,jar_path,results_dir,cluster,test,ttest,model_names):
     simpleJobCounter = 0
     if not os.path.exists('run_scripts'):
         os.makedirs('run_scripts')
-    if test == "1": run_dics = dics_test
-    if test != "1": run_dics = dics
+    run_dics = []
+    for model in model_names.split(","):
+        if test == "1":
+            run_dics.append(dics_test[model])
+        if test != "1":
+            run_dics.append(dics[model])
+    if ttest == "1": folds = ["Fold1", "Fold2", "Fold3", "Fold4", "Fold5", "Fold6", "Fold7", "Fold8", "Fold9", "Fold10", "Fold11", "Fold12", "Fold13", "Fold14", "Fold15"]
+    if ttest != "1": folds = ["Fold1", "Fold2", "Fold3", "Fold4", "Fold5"]
     for dic in run_dics:
         for metric in ["NDCG@10" , "MAP"]:
-            for fold in ["Fold1", "Fold2", "Fold3", "Fold4", "Fold5"]:
+            for fold in folds:
                 for key in dic.keys():
                     if key not in ["Name","rankerNumber"]:
                         for gridValue in dic[key]:
@@ -114,11 +132,14 @@ def main(data_dir,data_label,jar_path,results_dir,cluster,test):
                                     bashfile.write(sbatch_pre)
 
                                 outfile = 'echo "{} {} {} {}";\n'.format(data_label,dic["Name"],metric,fold,key)
-                                outfile += 'java -jar {} -silent -kcv 5'.format(jar_path)
-                                outfile += " -train {}{}{}{}train.txt".format(data_dir,os.path.sep,fold,os.path.sep)
-                                outfile += " -test {}{}{}{}test.txt".format(data_dir,os.path.sep,fold,os.path.sep)
+                                if ttest == "1": outfile += 'java -jar {} -silent -kcv 3'.format(jar_path)
+                                if ttest != "1": outfile += 'java -jar {} -silent -kcv 5'.format(jar_path)
+                                outfile += " -train {}{}{}{}train".format(data_dir,os.path.sep,fold,os.path.sep)
+                                outfile += " -test {}{}{}{}test".format(data_dir,os.path.sep,fold,os.path.sep)
                                 outfile += ' -ranker {}'.format(dic["rankerNumber"])
                                 outfile += ' -metric2t {}'.format(metric)
+                                outfile += ' -metric2T {}'.format(metric)
+                                outfile += ' -save {}{}{}{}{}{}.txt'.format(results_dir,metric,fold,key,gridValue,dic["Name"])
                                 outfile += " {} {}".format(key,gridValue)
                                 outfile += " > {}{}{}{}{}{}.out".format(results_dir,metric,fold,key,gridValue,dic["Name"])
                                 outfile += " ;"
@@ -146,4 +167,4 @@ if __name__ == '__main__':
         except Exception as e:
             print('Could not create output directory <<{}>>'.format(results_dir))
             sys.exit(0)
-    main(data_dir,data_label,jar_path,results_dir,options.cluster,options.test)
+    main(data_dir,data_label,jar_path,results_dir,options.cluster,options.test,options.ttest,options.model_names)
