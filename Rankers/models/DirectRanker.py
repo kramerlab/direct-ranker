@@ -113,7 +113,6 @@ class DirectRanker(BaseEstimator):
             if self.drop_out > 0:
                 nn = tf.keras.layers.Dropout(self.drop_out)(nn)
 
-
         feature_part = tf.keras.models.Model(input_layer, nn, name='feature_part')
 
         if self.print_summary:
@@ -178,8 +177,8 @@ class DirectRanker(BaseEstimator):
             y_len = 0
             for c in np.unique(y):
                 if c == max(np.unique(y)): continue
-                idx0 = np.random.randint(0, len(x_l[c+1]), self.scale_factor_train_sample*len(x))
-                idx1 = np.random.randint(0, len(x_l[c]), self.scale_factor_train_sample*len(x))
+                idx0 = np.random.randint(0, len(x_l[c+1]), int(self.scale_factor_train_sample*len(x)/(len(np.unique(y))-1)))
+                idx1 = np.random.randint(0, len(x_l[c]), int(self.scale_factor_train_sample*len(x)/(len(np.unique(y))-1)))
                 y_len += len(idx0)
                 x0_cur.extend(x_l[c+1][idx0])
                 x1_cur.extend(x_l[c][idx1])
