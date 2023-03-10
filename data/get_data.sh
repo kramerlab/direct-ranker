@@ -1,0 +1,17 @@
+# get MQ2007
+wget --output-document MQ2007.rar https://lyoz5a-ch3301.files.1drv.com/y4mWKvFV-J52ArYcpuGty_7ArjYHb_gXJysvFMS0Ww2Uy9YAhUGdiaA4zyImaQIsa57gf3ugoLVea9D6LgWPsVgqwwNTWyc29TsgpXR6fgdS8ATy-svdAFbFRylhISnNVMgJpVvHC3pHmAeLfkYigMJkED9EZSnhPTgqEJh1JVtsdsKro5Rj8O8XwDSWdSj_7DRpygGQCWsbTJki0J1XskSHA 
+unrar x MQ2007.rar
+rm MQ2007.rar
+
+# get MQ2008
+wget --output-document MQ2008.rar https://lyoz5a.ch.files.1drv.com/y4mM8g8v4d2mFfO5djKT-ELADpDDRcsVwXRSaZu-9rlOlgvW62Qeuc8hFe_wr6m5NZMnUSEfr6QpMP81ZIQIiwI4BnoHmIZT9Sraf53AmhhIfLi531DOKYZTy4MtDHbBC7dn_Z9DSKvLJZhERPIamAXCrONg7WrFPiG0sTpOXl3-YEYZ1scTslmNyg2a__3YalWRMyEIipY56sy97pb68Sdww
+unrar x MQ2008.rar
+rm MQ2008.rar
+
+# remove zeros from MQ2007/2008
+python delete_zeros.py
+
+# get MSLR-WEB10K
+wget --output-document MSLR-WEB10K.zip https://8kmjpq.dm.files.1drv.com/y4mhS-AvDnGSEBQTsG8VZrDSVbJLzlvgwHSBPDSAK9E8kfl_aHGcMhKy9FUSR7VSYk9J3vWkhcMwhlUHpHP_nR2YjxwZLORpn3k5ihHyvS8gtDLk7XSaNJ6b2jxBmc57_qa8lzgTo8fmbUhdaVYmb27fshRzYSufOgs3AkNw7urLhLJdVTKlyfT6zn3vSIM1a9V8oBbiGwN2DpQopirV8jH8w
+unzip MSLR-WEB10K.zip -d MSLR-WEB10K
+rm MSLR-WEB10K.zip

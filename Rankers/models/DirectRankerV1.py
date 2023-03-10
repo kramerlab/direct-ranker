@@ -1,10 +1,13 @@
 import numpy as np
 import tensorflow as tf
+if tf.__version__.split('.')[0] == '2':
+    import tensorflow.compat.v1 as tf
+    tf.disable_v2_behavior()
 import pickle
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split
 
-from supplementary_code_direct_ranker.helpers import nDCG_cls
+from Rankers.helpers import nDCG_cls
 
 import time
 
@@ -13,7 +16,7 @@ def default_weight_function(w1, w2):
     return w1 * w2
 
 
-class directRanker(BaseEstimator):
+class DirectRankerV1(BaseEstimator):
     """
     Constructor
     :param hidden_layers: List containing the numbers of neurons in the layers for feature
@@ -197,7 +200,7 @@ class directRanker(BaseEstimator):
         self.should_drop = tf.placeholder(tf.bool, name="drop")
 
         # Regularization
-        regularizer = tf.contrib.layers.l2_regularizer(self.weight_regularization)
+        regularizer = tf.keras.regularizers.l2(self.weight_regularization)
 
         # Input_Dropout
         in0 = tf.layers.dropout(inputs=self.x0,
@@ -221,7 +224,7 @@ class directRanker(BaseEstimator):
             name="nn_hidden_0"
         )
 
-        # By giving nn1 the same name as nn0 and using the flag reuse=True, 
+        # By giving nn1 the same name as nn0 and using the flag reuse=True,
         # the weights and biases of all neurons in each branch are identical
         nn1 = tf.layers.dense(
             inputs=in1,
@@ -514,7 +517,6 @@ class directRanker(BaseEstimator):
         """
         if self.x0 is None:
             if self.feature_func is None:
-                len(dictOfQueries[0][0][0])
                 self.num_features = len(dictOfQueries[0][0][0]) - (
                     1 if use_weights else 0)
             else:
