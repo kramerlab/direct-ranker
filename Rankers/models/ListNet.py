@@ -43,6 +43,7 @@ class ListNet(BaseEstimator):
                  feature_bias_dr=True,
                  kernel_initializer_dr=tf.random_normal_initializer,
                  kernel_regularizer_dr=0.0,
+                 drop_out=0.0,
                  # Common HPs
                  batch_size=200,
                  learning_rate=0.001,
@@ -66,6 +67,7 @@ class ListNet(BaseEstimator):
         self.feature_bias_dr = feature_bias_dr
         self.kernel_initializer_dr = kernel_initializer_dr
         self.kernel_regularizer_dr = kernel_regularizer_dr
+        self.drop_out = drop_out
         # Common HPs
         self.batch_size = batch_size
         self.learning_rate = learning_rate
@@ -105,6 +107,9 @@ class ListNet(BaseEstimator):
             name="nn_hidden_0"
         )(input_layer)
 
+        if self.drop_out > 0:
+            nn = tf.keras.layers.Dropout(self.drop_out)(nn)
+
         for i in range(1, len(self.hidden_layers_dr)):
             nn = tf.keras.layers.Dense(
                 units=self.hidden_layers_dr[i],
@@ -115,6 +120,9 @@ class ListNet(BaseEstimator):
                 activity_regularizer=tf.keras.regularizers.l2(self.kernel_regularizer_dr),
                 name="nn_hidden_" + str(i)
             )(nn)
+
+            if self.drop_out > 0:
+                nn = tf.keras.layers.Dropout(self.drop_out)(nn)
 
         nn = tf.keras.layers.Dense(
             units=1, # since we only have binary classes
