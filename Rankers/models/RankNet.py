@@ -4,7 +4,7 @@ from Rankers.models.DirectRanker import DirectRanker
 
 def _ranknet_cost(y_actual, y_predicted):
     # mean(log(1+exp((1+pred)/2)) - (1+pred)/2)
-    return tf.reduce_mean(tf.math.log(1+tf.math.exp((1+y_predicted)/2))-(1+y_predicted)/2)
+    return tf.reduce_mean(tf.math.log(1+tf.math.exp((1+y_predicted)))-(1+y_predicted))
 
 class RankNet(DirectRanker):
     """
@@ -15,7 +15,7 @@ class RankNet(DirectRanker):
         # DirectRanker HPs
         hidden_layers_dr=[256, 128, 64, 20],
         feature_activation_dr='relu',
-        ranking_activation_dr='sigmoid',
+        ranking_activation_dr='linear',
         feature_bias_dr=True,
         kernel_initializer_dr=tf.random_normal_initializer,
         kernel_regularizer_dr=0.0,

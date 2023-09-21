@@ -87,20 +87,26 @@ def bengio_nadeau_test(model1, model2, alpha=0.05):
 
 for binary in [True, False]:
     restuls_ttest = {}
-    for model in ["DirectRanker", "ListNet", "RankNet", "DirectRankerV1", "LambdaMart", "AdaRank"]:
+    for model in ["DirectRanker",  "ListNet*", "ListNet", "RankNet", "DirectRankerV1", "LambdaMart", "AdaRank"]:
         cur_dict = {}
         runNum = "_runNum0"
         if model == "LambdaMart" or model == "AdaRank":
             runNum = "_runNum1"
         for data in ["MSLR10K", "MQ2008", "MQ2007"]:
+            model_file = model
             if model == "RankNet" and data == "MSLR10K":
-                runNum = "_runNum1"
+                runNum = "_runNum99"
             elif model == "RankNet":
+                runNum = "_runNum99"
+            if model == "ListNet":
                 runNum = "_runNum0"
-            if os.path.isfile(f"gridsearch/{data}_{model}_list_of_ndcg_ttestTrue_binary{binary}{runNum}.npy"):
+            elif model == "ListNet*":
+                model_file = "ListNet"
+                runNum = "_runNum99"
+            if os.path.isfile(f"gridsearch/{data}_{model_file}_list_of_ndcg_ttestTrue_binary{binary}{runNum}.npy"):
                 cur_dict[data] = {
-                    "NDCG": np.load(f"gridsearch/{data}_{model}_list_of_ndcg_ttestTrue_binary{binary}{runNum}.npy", allow_pickle=True),
-                    "MAP": np.load(f"gridsearch/{data}_{model}_list_of_map_ttestTrue_binary{binary}{runNum}.npy", allow_pickle=True),
+                    "NDCG": np.load(f"gridsearch/{data}_{model_file}_list_of_ndcg_ttestTrue_binary{binary}{runNum}.npy", allow_pickle=True),
+                    "MAP": np.load(f"gridsearch/{data}_{model_file}_list_of_map_ttestTrue_binary{binary}{runNum}.npy", allow_pickle=True),
                 }
             else:
                 cur_dict[data] = {"NDCG":[0 for i in range(15)],"MAP":[0 for i in range(15)]}
@@ -108,9 +114,9 @@ for binary in [True, False]:
 
     ttest_table_dict = {"Algorithm / Data": ["MSLR10K-NDCG", "MSLR10K-MAP", "MQ2008-NDCG", "MQ2008-MAP", "MQ2007-NDCG", "MQ2007-MAP"]}
     ttest_value_dict = {}
-    for model1 in ["DirectRanker", "ListNet", "RankNet", "LambdaMart", "AdaRank"]:
+    for model1 in ["DirectRanker", "ListNet*", "ListNet", "RankNet", "LambdaMart", "AdaRank"]:
         cur_list = []
-        for model2 in ["DirectRanker", "ListNet", "RankNet", "LambdaMart", "AdaRank"]:
+        for model2 in ["DirectRanker", "ListNet*", "ListNet", "RankNet", "LambdaMart", "AdaRank"]:
             for data in ["MSLR10K", "MQ2008", "MQ2007"]:
                 for metric in ["NDCG", "MAP"]:
                     if model1 == model2:
@@ -126,7 +132,8 @@ for binary in [True, False]:
     print(pd.DataFrame(ttest_table_dict))
 
     # plot ttest results
-    model_names = ["DirectRanker", "ListNet", "RankNet", "LambdaMart", "AdaRank"]
+    model_names = ["DirectRanker", "ListNet*", "ListNet", "RankNet", "LambdaMart", "AdaRank"]
+    model_names2 = [r"RankNet$^*$", "ListNet$^*$", "ListNet", "RankNet", "LambdaMart", "AdaRank"]
     fig, ax = plt.subplots(2, 3, constrained_layout=True)
     # define colormap
     white = np.array([255/255, 255/255, 255/255, 1])
@@ -135,7 +142,7 @@ for binary in [True, False]:
     orange = np.array([218/255, 124/255, 48/255, 1])
     red = np.array([204/255, 37/255, 41/255, 1])
     black = np.array([83 / 255, 81 / 255, 84 / 255, 1])
-    viridis = mpl.colormaps['viridis']._resample(1000)
+    viridis = mpl.colormaps['viridis'].resampled(1000)
     newcolors = viridis(np.linspace(0, 1, 10000))
     newcolors[9500:, :] = white # self correlation
     newcolors[500:9500, :] = black # NS
@@ -170,21 +177,21 @@ for binary in [True, False]:
 
                         if df_list_bigger[coli][rowi] == 1 and round(pc[coli].loc[rowi], 3) <= 0.05:
                             ax[row][col].annotate("", xy=(coli+0.3, rowi), xytext=(coli+0.3, rowi+0.5), arrowprops=dict(arrowstyle="->", color=white))
-                            ax[row][col].text(coli, rowi, value, va='center', ha='center', size=5, color="white", fontstyle='italic')
+                            ax[row][col].text(coli, rowi, value, va='center', ha='center', size=4, color="white", fontstyle='italic')
                         elif df_list_bigger[coli][rowi] == 0 and round(pc[coli].loc[rowi], 3) <= 0.05:
                             ax[row][col].annotate("", xy=(coli, rowi+0.3), xytext=(coli+0.5, rowi+0.3), arrowprops=dict(arrowstyle="->", color=white))
-                            ax[row][col].text(coli, rowi, value, va='center', ha='center', size=5, color="white", fontstyle='italic')
+                            ax[row][col].text(coli, rowi, value, va='center', ha='center', size=4, color="white", fontstyle='italic')
                         else:
-                            ax[row][col].text(coli, rowi, value, va='center', ha='center', size=5, color="white")
+                            ax[row][col].text(coli, rowi, value, va='center', ha='center', size=4, color="white")
             ax[row][col].matshow(pc, cmap=newcmp, vmin=0, vmax=1)
             data_name = data
             if data == "MSLR10K":
                 data_name = "MSLR-WEB10K"
             ax[row][col].set_title(f"{data_name} {metric}")
             ax[row][col].set_xticks(np.arange(len(model_names)))
-            ax[row][col].set_xticklabels(model_names, fontsize=6, rotation=45)
+            ax[row][col].set_xticklabels(model_names2, fontsize=6, rotation=45)
             ax[row][col].set_yticks(np.arange(len(model_names)))
-            ax[row][col].set_yticklabels(model_names, fontsize=6, rotation=45)
+            ax[row][col].set_yticklabels(model_names2, fontsize=6, rotation=45)
 
     plt.savefig(f"15cv_ttest_binary{binary}.pdf")
 
@@ -325,6 +332,7 @@ friedman_result = ss.friedmanchisquare(*data_list.T)
 
 print(friedman_result[1])
 
+model_names = [r"RankNet^$*$", "RankNet", "ListNet", "LambdaMart", "AdaRank", "ES-Rank", "IESR-Rank", "IESVM-Rank"]
 # if pvalue < 0.05 we can reject the null hypothesis and do a post hoc order test
 if friedman_result[1] < 0.05:
     pc = sp.posthoc_nemenyi_friedman(data_list)
