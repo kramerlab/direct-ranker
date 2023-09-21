@@ -235,6 +235,11 @@ if __name__ == '__main__':
             ranker = DirectRankerV1()
 
         if args.model == "ListNet":
+            parameters['drop_out'] = [0., 0.2, 0.5]
+            parameters['kernel_regularizer_dr'] =  [0., 0.001, 0.01]
+            ranker = ListNet(num_features=x_train.shape[1])
+
+        if args.model == "ListNetOri":
             parameters['optimizer'] = [tf.keras.optimizers.SGD]
             ranker = ListNet(num_features=x_train.shape[1])
 

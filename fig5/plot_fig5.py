@@ -66,7 +66,7 @@ def plot(path = 'synth_data', label=False):
                 if model == "ListNet":
                     plt.scatter(n_train, nDCG[0], c=colors_points[0], marker='s', label=model, s=msize)
                 if model == "DirectRanker":
-                    plt.scatter(n_train, nDCG[0], c=colors_points[1], marker='x', label=model, s=msize)
+                    plt.scatter(n_train, nDCG[0], c=colors_points[1], marker='x', label=r"RankNet$^*$", s=msize)
                 if model == "RankNet":
                     plt.scatter(n_train, nDCG[0], c=colors_points[2], marker='>', label=model, s=msize)
                 if model == "LambdaRank":
